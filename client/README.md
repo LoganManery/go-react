@@ -1,54 +1,114 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
 ```
+Go Gin + Vite React App
+This project is a full-stack application using Go with Gin on the backend and React with Vite on the frontend.
+Project Structure
+Copygo-react-app/
+├── main.go                 # Main Go server file
+├── go.mod                  # Go module definition
+├── go.sum                  # Go dependencies checksums
+├── client/                 # Vite React app directory
+│   ├── public/             # Public assets
+│   ├── src/                # React source code
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── main.jsx
+│   │   └── ...
+│   ├── index.html          # HTML template
+│   ├── vite.config.js      # Vite configuration
+│   ├── package.json        # NPM dependencies
+│   └── ...
+└── README.md               # Project documentation
+Setup and Installation
+Prerequisites
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Go (1.19 or newer)
+Node.js (14 or newer) and npm
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Backend Setup
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Install Go dependencies:
+bashCopygo mod download
+
+Run the Go server:
+bashCopygo run main.go
+
+
+The server will start on port 8080 (default) or the port specified by the PORT environment variable.
+Frontend Setup
+
+Navigate to the client directory:
+bashCopycd client
+
+Install npm dependencies:
+bashCopynpm install
+
+For development:
+bashCopynpm run dev
+
+For production build:
+bashCopynpm run build
+
+
+Development Workflow
+Option 1: Separate Development Servers (Recommended for Development)
+For active development, it's best to run the Vite dev server and Go server separately:
+
+Run the Go server:
+bashCopygo run main.go
+
+In another terminal, run the Vite development server:
+bashCopycd client
+npm run dev
+
+The Vite dev server will automatically proxy API requests to the Go server based on the configuration in vite.config.js
+Visit http://localhost:5173 to view the React app with hot module replacement
+
+Option 2: Using the Go Server for Everything (Recommended for Production)
+
+Build the React app:
+bashCopycd client
+npm run build
+
+Run the Go server which will serve the built React app:
+bashCopygo run main.go
+
+Visit http://localhost:8080 to view the application
+
+API Endpoints
+
+GET /api/hello: Returns a JSON message from the server
+
+Environment Variables
+
+PORT: The port on which the server will run (default: 8080)
+Vite environment variables can be added with the VITE_ prefix in a .env file in the client directory
+
+Production Deployment
+
+Build the React app:
+bashCopycd client
+npm run build
+
+Build the Go application:
+bashCopygo build -o server
+
+Run the server:
+bashCopy./server
+
+
+Make sure both the server binary and the client/dist directory are included when deploying.
+Differences from Create React App
+Vite offers several advantages over Create React App:
+
+Faster development server startup - Vite uses ES modules natively
+Hot Module Replacement (HMR) - Better hot reloading for faster development
+Smaller bundle size - More efficient build output
+More flexible configuration - Easier to customize with vite.config.js
+Better performance - Both in development and production
+
+Key Vite-specific Files
+
+vite.config.js - Contains configuration for the Vite build tool and development server
+index.html - The root HTML template (in the client directory, not in public/)
+client/src/main.jsx - The entry point file
 ```
